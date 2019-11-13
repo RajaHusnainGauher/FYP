@@ -41,6 +41,7 @@ from sklearn.model_selection import cross_val_predict, train_test_split, cross_v
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import GridSearchCV
 from keras.preprocessing import sequence
+from keras.utils import to_categorical
 
 import util
 import nlp
@@ -298,11 +299,17 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
     param_grid = dict(batch_size=batch_size, nb_epoch=epochs)
 
     #it seems that the default gridsearchcv can have problem with stratifiedkfold sometimes, on w and ws dataset when we add "mixed_data"
+    #y_train = to_categorical(y_train)
+    print("\nX_Train type",type(X_train),'\n')
+    print("X_Train shape: ",X_train.shape,'\n')
+    print("X_Train:\n",X_train,'\n')
     print("\nYTrain type",type(y_train),'\n')
     print("Y_Train shape: ",y_train.shape,'\n')
     print("Y_Train:\n",y_train,'\n')
     fold=StratifiedKFold(n_splits=nfold)
     fold = fold.get_n_splits(X_train, y_train)
+    print("\nFold: ",fold,'\n')
+    #print("\nNon Zeros in 3rd Col of Y_train: ",np.count_nonzero(y_train[:,2]),'\n')
     _classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,
                                cv=fold)
 

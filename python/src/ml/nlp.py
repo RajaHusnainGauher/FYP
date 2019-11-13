@@ -2,6 +2,7 @@ import re
 
 import nltk
 nltk.download('stopwords')
+nltk.download('wordnet')
 from nltk.corpus import stopwords
 from nltk import PorterStemmer, WordNetLemmatizer
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as VS

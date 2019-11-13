@@ -30,7 +30,7 @@ import logging
 import sys
 import functools
 import gensim
-import numpy
+import numpy as np
 import random as rn
 
 import pandas as pd
@@ -59,18 +59,26 @@ def get_word_vocab(tweets, out_folder, normalize_option):
         tokenizer=functools.partial(nlp.tokenize, stem_or_lemma=normalize_option),
         preprocessor=tp.strip_hashtags,
         ngram_range=(1, 1),
-        stop_words=nlp.stopwords,  # We do better when we keep stopwords
+        stop_words=nlp.stopwordss,  # We do better when we keep stopwords
         decode_error='replace',
         max_features=50000,
         min_df=1,
         max_df=0.99
     )
 
+    
     # logger.info("\tgenerating word vectors, {}".format(datetime.datetime.now()))
     counts = word_vectorizer.fit_transform(tweets).toarray()
+    print("Count Shape: ",counts.shape,'\n')
+    print("Count Type: ",type(counts),'\n')
+    print("Count: ",counts,'\n')
+    print("Non Zero Count: ",np.count_nonzero(counts),'\n')
+    print("Feature Names: ",word_vectorizer.get_feature_names(),'\n')
+    print("Feature Names Length: ",len(word_vectorizer.get_feature_names()),'\n')
+    
     # logger.info("\t\t complete, dim={}, {}".format(counts.shape, datetime.datetime.now()))
     vocab = {v: i for i, v in enumerate(word_vectorizer.get_feature_names())}
-    pickle.dump(vocab, open(out_folder + "/" + "DNN_WORD_EMBEDDING" + ".pk", "wb"))
+    # pickle.dump(vocab, open(out_folder + "/" + "DNN_WORD_EMBEDDING" + ".pk", "wb"))
 
     word_embedding_input = []
     for tweet in counts:

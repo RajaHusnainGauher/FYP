@@ -272,6 +272,8 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
                     accepted_ds_tags: list = None):
     print("\t== Perform ANN ...")
     subfolder = outfolder + "/models"
+    print("\nSUBFOLDER: ",subfolder)
+    print("\nOUTFOLDER: ",outfolder,'\n')
     try:
         os.stat(subfolder)
     except:
@@ -296,7 +298,7 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
     param_grid = dict(batch_size=batch_size, nb_epoch=epochs)
 
     #it seems that the default gridsearchcv can have problem with stratifiedkfold sometimes, on w and ws dataset when we add "mixed_data"
-    fold=StratifiedKFold(n_folds=nfold, y=y_train)
+    fold=StratifiedKFold(n_splits=nfold, y=y_train)
     _classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,
                                cv=fold)
 

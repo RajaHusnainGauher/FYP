@@ -79,7 +79,7 @@ def get_word_vocab(tweets, out_folder, normalize_option):
     
     # logger.info("\t\t complete, dim={}, {}".format(counts.shape, datetime.datetime.now()))
     vocab = {v: i for i, v in enumerate(word_vectorizer.get_feature_names())}
-    # pickle.dump(vocab, open(out_folder + "/" + "DNN_WORD_EMBEDDING" + ".pk", "wb"))
+    pickle.dump(vocab, open(out_folder + "/" + "DNN_WORD_EMBEDDING" + ".pk", "wb"))
 
     word_embedding_input = []
     for tweet in counts:
@@ -309,9 +309,9 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
     fold=StratifiedKFold(n_splits=nfold)
     fold = fold.get_n_splits(X_train, y_train)
     print("\nFold: ",fold,'\n')
-    #print("\nNon Zeros in 3rd Col of Y_train: ",np.count_nonzero(y_train[:,2]),'\n')
+    
     _classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,
-                               cv=fold)
+                               cv=fold,verbose=10,scoring='accuracy')
 
     #this is the original grid search cv object to replace the above
     #_classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,
@@ -327,7 +327,7 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
     best_estimator = _classifier.best_estimator_
 
     # util.save_classifier_model(best_estimator, ann_model_file)
-
+    #print("\nClassifier: ",_classifier.estimator,'\n')
     # logger.info("testing on development set ....")
     if (X_test is not None):
         print("\tpredicting...{}".format(datetime.datetime.now()))
@@ -347,7 +347,12 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
         # util.print_eval_report(best_param_ann, cv_score_ann, dev_data_prediction_ann,
         #                       time_ann_predict_dev,
         #                       time_ann_train, y_test)
-
+    print("\ny_test shape:",y_test.shape,'\n')
+    print("\ny_test type:",type(y_test),'\n')
+    print("\ny_test :",y_test,'\n')
+    print("\nheldout_predictions_final shape:",heldout_predictions_final.shape,'\n')
+    print("\nheldout_predictions_final type:",type(heldout_predictions_final),'\n')
+    print("\nheldout_predictions_final :",heldout_predictions_final,'\n')
 
 def output_data_stats(X_train_data, y_train):
     labels={}

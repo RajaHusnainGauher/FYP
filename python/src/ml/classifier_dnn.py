@@ -311,7 +311,7 @@ def grid_search_dnn(dataset_name, outfolder, model_descriptor: str,
     print("\nFold: ",fold,'\n')
     
     _classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,
-                               cv=fold,verbose=10,scoring='accuracy')
+                               cv=fold,verbose=10,scoring='f1')
 
     #this is the original grid search cv object to replace the above
     #_classifier = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=cpus,

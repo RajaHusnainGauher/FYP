@@ -375,7 +375,7 @@ def gridsearch(input_data_file, dataset_name, sys_out, model_descriptor: str,
     raw_data = pd.read_csv(input_data_file, sep=',', encoding="utf-8")
     print("IN CLASSIFIER_DNN: \n",raw_data.columns)
     print('\n',raw_data)
-    M = get_word_vocab(raw_data.tweet, sys_out, word_norm_option)
+    M = get_word_vocab(raw_data.tweet.astype('U'), sys_out, word_norm_option)
     # M=self.feature_scale(M)
     M0 = M[0]
 
